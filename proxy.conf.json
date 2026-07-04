@@ -1,0 +1,11 @@
+{
+  "/api": {
+    "target": "https://iot-trabajo.onrender.com",
+    "secure": true,
+    "changeOrigin": true,
+    "pathRewrite": {
+      "^/api": ""
+    },
+    "logLevel": "debug"
+  }
+}

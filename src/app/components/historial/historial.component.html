@@ -1,0 +1,34 @@
+<div class="historial">
+  <p class="historial__titulo">Historial de mediciones</p>
+
+  @if (filas().length > 0) {
+    <div class="tabla-wrap">
+      <table class="tabla">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Nivel de agua</th>
+            <th>Temperatura</th>
+            <th>Humedad</th>
+            <th>¿Lloviendo?</th>
+            <th>Fecha y hora</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (m of filas(); track m.id_medicion) {
+            <tr>
+              <td>{{ m.id_medicion }}</td>
+              <td>{{ m.nivel_agua }} cm</td>
+              <td>{{ m.temperatura }} °C</td>
+              <td>{{ m.humedad }} %</td>
+              <td>{{ m.esta_lloviendo ? 'Sí' : 'No' }}</td>
+              <td>{{ formatearFecha(m.fecha_hora) }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  } @else {
+    <p class="historial__vacio">Cargando historial...</p>
+  }
+</div>

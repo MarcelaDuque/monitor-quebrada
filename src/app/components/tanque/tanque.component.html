@@ -1,0 +1,13 @@
+<div class="tanque-wrapper">
+  <div class="tanque">
+    <div
+      class="tanque__fill"
+      [style.height.%]="alturaPct()"
+      [style.background]="color()">
+    </div>
+  </div>
+  <div class="escala">
+    <span>{{ max }} cm</span>
+    <span>0 cm</span>
+  </div>
+</div>

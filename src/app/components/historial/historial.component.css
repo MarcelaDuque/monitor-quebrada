@@ -1,0 +1,56 @@
+.historial {
+  width: 100%;
+}
+
+.historial__titulo {
+  margin: 0 0 14px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #333;
+}
+
+.tabla-wrap {
+  overflow-x: auto;          /* permite scroll horizontal en pantallas chicas */
+  max-height: 360px;         /* si hay muchas filas, scroll vertical */
+  overflow-y: auto;
+  border: 1px solid #eee;
+  border-radius: 8px;
+}
+
+.tabla {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.tabla thead th {
+  position: sticky;          /* el encabezado se queda fijo al hacer scroll */
+  top: 0;
+  background: #f7f7f5;
+  color: #555;
+  font-weight: 600;
+  text-align: left;
+  padding: 10px 14px;
+  border-bottom: 1px solid #e5e5e5;
+  white-space: nowrap;
+}
+
+.tabla tbody td {
+  padding: 9px 14px;
+  border-bottom: 1px solid #f0f0f0;
+  color: #333;
+  white-space: nowrap;
+}
+
+.tabla tbody tr:nth-child(even) {
+  background: #fafafa;       /* filas alternas para leer mejor */
+}
+
+.tabla tbody tr:hover {
+  background: #eef4fb;
+}
+
+.historial__vacio {
+  color: #999;
+  font-size: 14px;
+}
