@@ -44,7 +44,7 @@ export class QuebradaApiService {
         const ordenado = [...arr].sort(
           (a, b) => new Date(a.fecha_hora).getTime() - new Date(b.fecha_hora).getTime(),
         );
-        return ordenado.slice(-30);
+        return ordenado;
       }),
       shareReplay(1),
     );
