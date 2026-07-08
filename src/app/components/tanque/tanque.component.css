@@ -1,7 +1,7 @@
 .tanque-wrapper {
   display: flex;
-  align-items: stretch;
-  gap: 10px;
+  align-items: flex-end;
+  gap: 24px;
   flex-shrink: 0;
 }
 
@@ -13,6 +13,7 @@
   border-radius: 10px;
   overflow: hidden;
   background: #f4f4f4;
+  flex-shrink: 0;
 }
 
 .tanque__fill {
@@ -23,11 +24,32 @@
   transition: height 0.6s ease, background 0.4s ease;
 }
 
-.escala {
+.linea {
+  position: absolute;
+  left: 0;
+  right: 0;
+  border-top: 2px dashed;
+}
+.linea--evac { border-color: #E24B4A; }
+.linea--crit { border-color: #EF7A27; }
+.linea--adv  { border-color: #EAB308; }
+
+.leyenda__titulo {
+  margin: 0 0 10px;
+  font-size: 13px;
+  color: #666;
+}
+.leyenda__item {
   display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  font-size: 11px;
-  color: #999;
-  padding: 2px 0;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  margin-bottom: 8px;
+  color: #333;
+}
+.punto {
+  width: 14px;
+  height: 4px;
+  border-radius: 2px;
+  display: inline-block;
 }

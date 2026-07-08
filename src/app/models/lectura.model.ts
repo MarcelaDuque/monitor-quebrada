@@ -23,22 +23,41 @@ export interface Alerta {
   atendida: boolean;
 }
 
-// Color e info visual para cada nivel de alerta de la API
-export const ALERTA_INFO: Record<string, { texto: string; color: string }> = {
-  NORMAL:   { texto: 'Normal',         color: '#1D9E75' }, // sin alertas
-  AMARILLA: { texto: 'Precaución',     color: '#EAB308' },
-  NARANJA:  { texto: 'Prevención',     color: '#EF9F27' },
-  ROJA:     { texto: 'Crítico',        color: '#E24B4A' },
-  CRITICA:  { texto: 'Crítico',        color: '#B91C1C' },
-  PRUEBA:   { texto: 'Prueba',         color: '#6B7280' },
+// ============================================================
+//  UMBRALES DE NIVEL DE AGUA (según la lógica del firmware)
+//  El color se decide directamente por el nivel_agua en cm.
+// ------------------------------------------------------------
+//    Normal       -> menos de 20 cm   -> verde
+//    Advertencia  -> 20 cm o más      -> amarillo
+//    Crítico      -> 40 cm o más      -> naranja
+//    Evacuación   -> 60 cm o más      -> rojo
+// ============================================================
+export const UMBRALES = {
+  ADVERTENCIA: 20,
+  CRITICO: 40,
+  EVACUACION: 60,
 };
 
-// Devuelve la info visual (texto + color) a partir del nombre del nivel
-export function infoDeAlerta(nivel: string | null | undefined) {
-  if (!nivel) return ALERTA_INFO['NORMAL'];
-  return ALERTA_INFO[nivel] ?? ALERTA_INFO['NORMAL'];
+// Info visual (texto + color) para cada estado
+export interface EstadoInfo {
+  texto: string;
+  color: string;
 }
 
-// Escala del tanque. La quebrada se mueve en pocos cm, así que el "lleno"
-// visual lo ponemos en 35 cm (ajústalo si tu quebrada llega más alto).
-export const NIVEL_MAX_TANQUE = 35;
+// Decide el estado y el color a partir del nivel de agua (en cm)
+export function infoDeNivel(nivel: number): EstadoInfo {
+  if (nivel >= UMBRALES.EVACUACION) {
+    return { texto: 'Evacuación', color: '#E24B4A' }; // rojo
+  }
+  if (nivel >= UMBRALES.CRITICO) {
+    return { texto: 'Crítico', color: '#EF7A27' };    // naranja
+  }
+  if (nivel >= UMBRALES.ADVERTENCIA) {
+    return { texto: 'Advertencia', color: '#EAB308' }; // amarillo
+  }
+  return { texto: 'Normal', color: '#1D9E75' };        // verde
+}
+
+// Escala del tanque. La quebrada se mueve en pocos cm; el "lleno" visual
+// lo ponemos en 70 cm para que se vea bien el umbral de evacuación (60).
+export const NIVEL_MAX_TANQUE = 70;

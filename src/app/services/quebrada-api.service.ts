@@ -7,23 +7,27 @@ import { Medicion, Alerta } from '../models/lectura.model';
 /**
  * SERVICIO REAL - consume la API REST de tus compañeros (FastAPI en Render).
  *
- * IMPORTANTE - PROXY DE DESARROLLO:
- * La BASE ahora es '/api' (ruta local), NO la URL completa de Render.
- * El archivo proxy.conf.json reenvía /api -> https://iot-trabajo.onrender.com
- * por detrás, esquivando el bloqueo de CORS mientras desarrollas.
+ * Endpoints usados:
+ *   GET /mediciones/ultima  -> última medición
+ *   GET /mediciones         -> todas las mediciones (para la gráfica y la tabla)
+ *   GET /alertas            -> lista de alertas
  *
- * Cuando tus compañeros arreglen el CORS en la API, puedes volver a poner
- * la URL completa aquí y arrancar con "ng serve" normal (sin proxy).
+ * Como una API REST normal NO empuja datos sola, hacemos "polling":
+ * consultamos la API cada X segundos.
  */
 @Injectable({ providedIn: 'root' })
 export class QuebradaApiService {
   private http = inject(HttpClient);
 
-  // Usamos la URL completa de la api.
+  // URL base de la API. Si cambia el dominio, solo se edita aquí.
   private readonly BASE = 'https://iot-trabajo.onrender.com';
 
   // Cada cuántos milisegundos volver a consultar la API
   private readonly INTERVALO = 5000; // 5 segundos
+
+  // Cuántos registros mostrar como máximo en la gráfica y la tabla.
+  // Súbelo si quieres ver más historial (o ponlo muy alto para ver todos).
+  private readonly MAX_REGISTROS = 100;
 
   /** Última medición, refrescada cada INTERVALO ms */
   lecturaActual(): Observable<Medicion> {
@@ -34,8 +38,9 @@ export class QuebradaApiService {
   }
 
   /**
-   * Histórico para la gráfica: pide todas las mediciones y se queda con
-   * las últimas 30, ordenadas de más antigua a más reciente.
+   * Histórico para la gráfica y la tabla: pide todas las mediciones,
+   * las ordena por fecha (de más antigua a más reciente) y se queda con
+   * las últimas MAX_REGISTROS.
    */
   historico(): Observable<Medicion[]> {
     return timer(0, this.INTERVALO).pipe(
@@ -44,16 +49,13 @@ export class QuebradaApiService {
         const ordenado = [...arr].sort(
           (a, b) => new Date(a.fecha_hora).getTime() - new Date(b.fecha_hora).getTime(),
         );
-        return ordenado;
+        return ordenado.slice(-this.MAX_REGISTROS);
       }),
       shareReplay(1),
     );
   }
 
-  /**
-   * Lista de alertas. La API las devuelve de más reciente a más antigua;
-   * la primera del arreglo es la más nueva.
-   */
+  /** Lista de alertas (la más reciente primero). */
   alertas(): Observable<Alerta[]> {
     return timer(0, this.INTERVALO).pipe(
       switchMap(() => this.http.get<Alerta[]>(`${this.BASE}/alertas`)),

@@ -5,9 +5,28 @@
       [style.height.%]="alturaPct()"
       [style.background]="color()">
     </div>
+    <div class="linea linea--evac" [style.bottom.%]="lineaEvacuacion"></div>
+    <div class="linea linea--crit" [style.bottom.%]="lineaCritico"></div>
+    <div class="linea linea--adv" [style.bottom.%]="lineaAdvertencia"></div>
   </div>
-  <div class="escala">
-    <span>{{ max }} cm</span>
-    <span>0 cm</span>
+
+  <div class="leyenda">
+    <p class="leyenda__titulo">Umbrales de nivel</p>
+    <div class="leyenda__item">
+      <span class="punto" style="background:#E24B4A"></span>
+      Evacuación · ≥ {{ umbrales.EVACUACION }} cm
+    </div>
+    <div class="leyenda__item">
+      <span class="punto" style="background:#EF7A27"></span>
+      Crítico · ≥ {{ umbrales.CRITICO }} cm
+    </div>
+    <div class="leyenda__item">
+      <span class="punto" style="background:#EAB308"></span>
+      Advertencia · ≥ {{ umbrales.ADVERTENCIA }} cm
+    </div>
+    <div class="leyenda__item">
+      <span class="punto" style="background:#1D9E75"></span>
+      Normal · &lt; {{ umbrales.ADVERTENCIA }} cm
+    </div>
   </div>
 </div>

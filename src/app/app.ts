@@ -6,7 +6,7 @@ import { HistorialComponent } from './components/historial/historial.component';
 import {
   Medicion,
   Alerta,
-  infoDeAlerta,
+  infoDeNivel,
 } from './models/lectura.model';
 import { QuebradaApiService } from './services/quebrada-api.service';
 
@@ -38,15 +38,15 @@ export class App {
   historico = toSignal(this.svc.historico(), { initialValue: [] as Medicion[] });
   alertas = toSignal(this.svc.alertas(), { initialValue: [] as Alerta[] });
 
-  // La alerta más reciente (la primera del arreglo que devuelve la API).
-  // Si no hay alertas, tratamos el estado como NORMAL.
+  // La alerta más reciente (para mostrar su descripción junto al tanque).
   ultimaAlerta = computed<Alerta | null>(() => {
     const lista = this.alertas();
     return lista.length > 0 ? lista[0] : null;
   });
 
-  // Info visual (texto + color) según la última alerta de la API
-  estadoInfo = computed(() => infoDeAlerta(this.ultimaAlerta()?.nivel_alerta));
+  // Info visual (texto + color) calculada DIRECTAMENTE del nivel de agua
+  // según los umbrales del firmware (20 / 40 / 60 cm).
+  estadoInfo = computed(() => infoDeNivel(this.actual().nivel_agua));
 
   // Color para el tanque y la píldora
   color = computed(() => this.estadoInfo().color);
