@@ -19,8 +19,8 @@ import { Medicion, Alerta } from '../models/lectura.model';
 export class QuebradaApiService {
   private http = inject(HttpClient);
 
-  // Usamos la ruta local del proxy en vez de la URL completa.
-  private readonly BASE = '/api';
+  // Usamos la URL completa de la api.
+  private readonly BASE = 'https://iot-trabajo.onrender.com';
 
   // Cada cuántos milisegundos volver a consultar la API
   private readonly INTERVALO = 5000; // 5 segundos
