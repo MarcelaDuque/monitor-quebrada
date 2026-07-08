@@ -25,9 +25,9 @@ export class QuebradaApiService {
   // Cada cuántos milisegundos volver a consultar la API
   private readonly INTERVALO = 5000; // 5 segundos
 
-  // Cuántos registros mostrar como máximo en la gráfica y la tabla.
-  // Súbelo si quieres ver más historial (o ponlo muy alto para ver todos).
-  private readonly MAX_REGISTROS = 100;
+  // Cuántos registros usar SOLO en la gráfica (para que no se sature).
+  // La tabla muestra TODOS; este límite es únicamente para la gráfica.
+  private readonly MAX_GRAFICA = 100;
 
   /** Última medición, refrescada cada INTERVALO ms */
   lecturaActual(): Observable<Medicion> {
@@ -38,18 +38,17 @@ export class QuebradaApiService {
   }
 
   /**
-   * Histórico para la gráfica y la tabla: pide todas las mediciones,
-   * las ordena por fecha (de más antigua a más reciente) y se queda con
-   * las últimas MAX_REGISTROS.
+   * TODAS las mediciones, ordenadas por fecha de más antigua a más reciente.
+   * Se usa tanto para la tabla como para la gráfica (cada una las ordena/recorta
+   * a su manera después).
    */
   historico(): Observable<Medicion[]> {
     return timer(0, this.INTERVALO).pipe(
       switchMap(() => this.http.get<Medicion[]>(`${this.BASE}/mediciones`)),
       map((arr) => {
-        const ordenado = [...arr].sort(
+        return [...arr].sort(
           (a, b) => new Date(a.fecha_hora).getTime() - new Date(b.fecha_hora).getTime(),
         );
-        return ordenado.slice(-this.MAX_REGISTROS);
       }),
       shareReplay(1),
     );

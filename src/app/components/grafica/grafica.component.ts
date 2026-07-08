@@ -4,8 +4,9 @@ import { ChartConfiguration } from 'chart.js';
 import { Medicion } from '../../models/lectura.model';
 
 /**
- * Gráfica histórica con dos líneas: nivel de agua (cm) y temperatura (°C),
- * usando los datos reales de la API (campo nivel_agua y temperatura).
+ * Gráfica histórica con dos líneas: nivel de agua (cm) y temperatura (°C).
+ * Usa los datos reales de la API. Para no saturarse, muestra como máximo
+ * los últimos 100 registros (la tabla sí muestra todos).
  */
 @Component({
   selector: 'app-grafica',
@@ -42,8 +43,11 @@ import { Medicion } from '../../models/lectura.model';
 export class GraficaComponent {
   mediciones = input.required<Medicion[]>();
 
+  // Para la gráfica usamos solo los últimos 100 (de más antiguo a más reciente)
+  private ultimas = computed(() => this.mediciones().slice(-100));
+
   chartData = computed<ChartConfiguration<'line'>['data']>(() => ({
-    labels: this.mediciones().map((m) => {
+    labels: this.ultimas().map((m) => {
       const d = new Date(m.fecha_hora.replace(' ', 'T'));
       return isNaN(d.getTime()) ? '' : d.toLocaleTimeString('es-CO', { hour12: false });
     }),
@@ -51,7 +55,7 @@ export class GraficaComponent {
       {
         label: 'Nivel de agua (cm)',
         yAxisID: 'y',
-        data: this.mediciones().map((m) => m.nivel_agua),
+        data: this.ultimas().map((m) => m.nivel_agua),
         borderColor: '#378ADD',
         backgroundColor: 'rgba(55,138,221,0.12)',
         borderWidth: 2,
@@ -62,7 +66,7 @@ export class GraficaComponent {
       {
         label: 'Temperatura (°C)',
         yAxisID: 'y1',
-        data: this.mediciones().map((m) => m.temperatura),
+        data: this.ultimas().map((m) => m.temperatura),
         borderColor: '#D85A30',
         borderWidth: 2,
         borderDash: [5, 4],

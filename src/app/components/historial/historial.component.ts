@@ -3,8 +3,8 @@ import { Medicion } from '../../models/lectura.model';
 
 /**
  * Tabla de historial de mediciones.
- * Usa el mismo GET /mediciones (a través del servicio), mostrando las
- * lecturas en filas, de la más reciente a la más antigua.
+ * Muestra TODOS los registros, ordenados por id_medicion de mayor a menor
+ * (el más reciente arriba: 102, 101, 100...).
  */
 @Component({
   selector: 'app-historial',
@@ -16,8 +16,10 @@ export class HistorialComponent {
   // Recibe la lista de mediciones desde el dashboard
   mediciones = input.required<Medicion[]>();
 
-  // Las invertimos para mostrar la más reciente arriba
-  filas = computed(() => [...this.mediciones()].reverse());
+  // Ordena por id_medicion de MAYOR a MENOR (descendente)
+  filas = computed(() =>
+    [...this.mediciones()].sort((a, b) => b.id_medicion - a.id_medicion)
+  );
 
   // Formatea la fecha para que se vea bonita
   formatearFecha(fecha: string): string {
