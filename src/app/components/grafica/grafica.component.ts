@@ -5,8 +5,7 @@ import { Medicion } from '../../models/lectura.model';
 
 /**
  * Gráfica histórica con dos líneas: nivel de agua (cm) y temperatura (°C).
- * Usa los datos reales de la API. Para no saturarse, muestra como máximo
- * los últimos 100 registros (la tabla sí muestra todos).
+ * Muestra los últimos 100 registros para no saturarse.
  */
 @Component({
   selector: 'app-grafica',
@@ -43,7 +42,7 @@ import { Medicion } from '../../models/lectura.model';
 export class GraficaComponent {
   mediciones = input.required<Medicion[]>();
 
-  // Para la gráfica usamos solo los últimos 100 (de más antiguo a más reciente)
+  // Solo los últimos 100 (de más antiguo a más reciente)
   private ultimas = computed(() => this.mediciones().slice(-100));
 
   chartData = computed<ChartConfiguration<'line'>['data']>(() => ({
@@ -90,6 +89,9 @@ export class GraficaComponent {
       },
       y1: {
         position: 'right',
+        // Rango fijo y razonable para temperatura (evita la escala rara)
+        min: 0,
+        max: 50,
         title: { display: true, text: '°C' },
         grid: { drawOnChartArea: false },
       },

@@ -46,7 +46,8 @@
   <section class="panel">
     <app-tanque
       [nivel]="actual().nivel_agua"
-      [color]="color()" />
+      [color]="color()"
+      [estado]="estadoInfo().texto" />
     <div class="alerta-actual">
       @if (ultimaAlerta(); as a) {
         <p class="alerta-actual__titulo">Última alerta del sistema</p>

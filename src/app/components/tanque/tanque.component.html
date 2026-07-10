@@ -5,28 +5,26 @@
       [style.height.%]="alturaPct()"
       [style.background]="color()">
     </div>
-    <div class="linea linea--evac" [style.bottom.%]="lineaEvacuacion"></div>
-    <div class="linea linea--crit" [style.bottom.%]="lineaCritico"></div>
-    <div class="linea linea--adv" [style.bottom.%]="lineaAdvertencia"></div>
   </div>
 
   <div class="leyenda">
-    <p class="leyenda__titulo">Umbrales de nivel</p>
-    <div class="leyenda__item">
-      <span class="punto" style="background:#E24B4A"></span>
-      Evacuación · ≥ {{ umbrales.EVACUACION }} cm
+    <p class="leyenda__titulo">Estado (según la API)</p>
+    <div class="leyenda__estado" [style.color]="color()">
+      {{ estado() }}
     </div>
-    <div class="leyenda__item">
-      <span class="punto" style="background:#EF7A27"></span>
-      Crítico · ≥ {{ umbrales.CRITICO }} cm
-    </div>
-    <div class="leyenda__item">
-      <span class="punto" style="background:#EAB308"></span>
-      Advertencia · ≥ {{ umbrales.ADVERTENCIA }} cm
-    </div>
-    <div class="leyenda__item">
-      <span class="punto" style="background:#1D9E75"></span>
-      Normal · &lt; {{ umbrales.ADVERTENCIA }} cm
+    <div class="leyenda__ref">
+      <div class="leyenda__item">
+        <span class="punto" style="background:#1D9E75"></span> Normal
+      </div>
+      <div class="leyenda__item">
+        <span class="punto" style="background:#EAB308"></span> Prevención
+      </div>
+      <div class="leyenda__item">
+        <span class="punto" style="background:#EF7A27"></span> Precaución
+      </div>
+      <div class="leyenda__item">
+        <span class="punto" style="background:#E24B4A"></span> Crítica
+      </div>
     </div>
   </div>
 </div>

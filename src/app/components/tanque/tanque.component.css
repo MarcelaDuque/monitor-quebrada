@@ -24,32 +24,31 @@
   transition: height 0.6s ease, background 0.4s ease;
 }
 
-.linea {
-  position: absolute;
-  left: 0;
-  right: 0;
-  border-top: 2px dashed;
-}
-.linea--evac { border-color: #E24B4A; }
-.linea--crit { border-color: #EF7A27; }
-.linea--adv  { border-color: #EAB308; }
-
 .leyenda__titulo {
-  margin: 0 0 10px;
+  margin: 0 0 6px;
   font-size: 13px;
   color: #666;
+}
+.leyenda__estado {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 14px;
+}
+.leyenda__ref {
+  border-top: 1px solid #eee;
+  padding-top: 10px;
 }
 .leyenda__item {
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 14px;
-  margin-bottom: 8px;
-  color: #333;
+  font-size: 13px;
+  margin-bottom: 6px;
+  color: #555;
 }
 .punto {
-  width: 14px;
-  height: 4px;
-  border-radius: 2px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
   display: inline-block;
 }

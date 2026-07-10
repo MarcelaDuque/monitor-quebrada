@@ -1,11 +1,10 @@
 import { Component, input, computed } from '@angular/core';
-import { NIVEL_MAX_TANQUE, UMBRALES } from '../../models/lectura.model';
+import { NIVEL_MAX_TANQUE } from '../../models/lectura.model';
 
 /**
  * Indicador visual tipo "tanque" que se llena según el nivel de agua.
- * El COLOR lo recibe desde el dashboard (calculado por el nivel en cm).
- * Muestra líneas de referencia en los umbrales de advertencia, crítico
- * y evacuación.
+ * El COLOR lo recibe desde el dashboard, que lo obtiene del estado_alerta
+ * de la API. El tanque NO calcula estados.
  */
 @Component({
   selector: 'app-tanque',
@@ -16,20 +15,13 @@ import { NIVEL_MAX_TANQUE, UMBRALES } from '../../models/lectura.model';
 export class TanqueComponent {
   // Nivel actual en cm
   nivel = input.required<number>();
-  // Color que viene del dashboard (hex)
+  // Color que viene del dashboard (según estado_alerta de la API)
   color = input.required<string>();
+  // Texto del estado (Normal, Prevención, Precaución, Crítica)
+  estado = input.required<string>();
 
-  // Altura del relleno en porcentaje (0 a 100), según la escala del tanque
+  // Altura del relleno en porcentaje (0 a 100), solo visual
   alturaPct = computed(() =>
     Math.max(0, Math.min(100, (this.nivel() / NIVEL_MAX_TANQUE) * 100))
   );
-
-  max = NIVEL_MAX_TANQUE;
-
-  // Posición (en % desde abajo) de cada línea de umbral
-  lineaAdvertencia = (UMBRALES.ADVERTENCIA / NIVEL_MAX_TANQUE) * 100;
-  lineaCritico = (UMBRALES.CRITICO / NIVEL_MAX_TANQUE) * 100;
-  lineaEvacuacion = (UMBRALES.EVACUACION / NIVEL_MAX_TANQUE) * 100;
-
-  umbrales = UMBRALES;
 }
